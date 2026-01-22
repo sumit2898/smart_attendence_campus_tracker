@@ -1,0 +1,8 @@
+{
+  "name": "Copy of SCAT - Smart Campus Attendance Tracker",
+  "description": "A high-security attendance system featuring dynamic QR codes, geofencing, and AI-driven predictive analytics.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}

@@ -2,7 +2,10 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AttendanceRecord } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getAIClient = () => {
+  const apiKey = process.env.API_KEY || "dummy_key";
+  return new GoogleGenAI({ apiKey });
+};
 
 export async function analyzeAttendanceTrends(records: AttendanceRecord[]) {
   try {
@@ -14,8 +17,9 @@ export async function analyzeAttendanceTrends(records: AttendanceRecord[]) {
       Data: ${JSON.stringify(records)}
     `;
 
+    const ai = getAIClient();
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",

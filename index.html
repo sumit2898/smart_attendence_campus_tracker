@@ -1,37 +1,35 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCAT - Smart Campus Attendance Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-      @keyframes scan {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(100%); }
-        100% { transform: translateY(0); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCAT - Smart Campus Attendance Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes scan {
+      0% {
+        transform: translateY(0);
       }
-      .scanner-line {
-        animation: scan 2s infinite ease-in-out;
+
+      50% {
+        transform: translateY(100%);
       }
-    </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "zustand": "https://esm.sh/zustand@^5.0.10",
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
-    "recharts": "https://esm.sh/recharts@^3.7.0"
-  }
-}
-</script>
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .scanner-line {
+      animation: scan 2s infinite ease-in-out;
+    }
+  </style>
+  <script type="module" src="/src/index.tsx"></script>
 </head>
+
 <body class="bg-gray-50 text-gray-900 font-sans">
-    <div id="root"></div>
+  <div id="root"></div>
 </body>
+
 </html>

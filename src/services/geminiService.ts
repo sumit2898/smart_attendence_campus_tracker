@@ -1,18 +1,18 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { AttendanceRecord } from "../types";
+import { AttendanceRecord, AIAnalysisResult } from "../types";
 
 const getAIClient = () => {
   const apiKey = process.env.API_KEY || "dummy_key";
   return new GoogleGenAI({ apiKey });
 };
 
-export async function analyzeAttendanceTrends(records: AttendanceRecord[]) {
+export async function analyzeAttendanceTrends(records: AttendanceRecord[]): Promise<AIAnalysisResult | null> {
   try {
     const prompt = `
-      Analyze the following attendance data for campus students. 
-      Identify students at risk of failing due to poor attendance.
-      Provide a "Risk Score" (0-100) and specific recommendations for each student.
+      Analyze the attendance data for the student "Alex Johnson". 
+      Determine their risk of failing based on attendance patterns.
+      Return a risk score (0-100), status (SAFE, WARNING, CRITICAL), and a short recommendation.
       
       Data: ${JSON.stringify(records)}
     `;
@@ -26,24 +26,23 @@ export async function analyzeAttendanceTrends(records: AttendanceRecord[]) {
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            analysis: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  studentName: { type: Type.STRING },
-                  riskScore: { type: Type.NUMBER },
-                  status: { type: Type.STRING },
-                  recommendation: { type: Type.STRING }
-                }
-              }
-            }
-          }
+            riskScore: { type: Type.NUMBER },
+            status: { type: Type.STRING, enum: ["SAFE", "WARNING", "CRITICAL"] },
+            recommendation: { type: Type.STRING }
+          },
+          required: ["riskScore", "status", "recommendation"]
         }
       }
     });
 
-    return JSON.parse(response.text);
+    if (response.text) {
+      const data = JSON.parse(response.text);
+      return {
+        ...data,
+        lastUpdated: Date.now()
+      };
+    }
+    return null;
   } catch (error) {
     console.error("AI Analysis failed:", error);
     return null;

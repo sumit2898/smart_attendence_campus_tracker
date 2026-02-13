@@ -1,18 +1,21 @@
 
 import { create } from 'zustand';
-import { User, AttendanceRecord, OfflineQueueItem, UserRole } from './types';
+import { User, AttendanceRecord, OfflineQueueItem, UserRole, ScheduleItem, AIAnalysisResult } from './types';
 
 interface AppState {
   user: User | null;
   isAuthenticated: boolean;
   offlineQueue: OfflineQueueItem[];
   attendanceHistory: AttendanceRecord[];
-  
+  schedule: ScheduleItem[];
+  aiInsights: AIAnalysisResult | null;
+
   setUser: (user: User | null) => void;
   addAttendance: (record: AttendanceRecord) => void;
   syncOfflineQueue: () => void;
   addToOfflineQueue: (data: Partial<AttendanceRecord>) => void;
   setAttendanceHistory: (history: AttendanceRecord[]) => void;
+  setAiInsights: (insights: AIAnalysisResult) => void;
 }
 
 // Initial dummy data for the prototype
@@ -75,14 +78,21 @@ export const useStore = create<AppState>((set, get) => ({
   isAuthenticated: false,
   offlineQueue: initialQueue,
   attendanceHistory: initialHistory,
+  schedule: [
+    { id: '1', courseName: 'Advanced AI Lab', time: '09:00 AM', professor: 'Dr. Peterson', room: '402', status: 'COMPLETED' },
+    { id: '2', courseName: 'Discrete Math', time: '11:00 AM', professor: 'Dr. Aris', room: 'Hall B', status: 'UPCOMING' },
+    { id: '3', courseName: 'System Design', time: '02:00 PM', professor: 'Prof. Sarah', room: '305', status: 'UPCOMING' }
+  ],
+  aiInsights: null,
 
   setUser: (user) => set({ user, isAuthenticated: !!user }),
-  
+
   addAttendance: (record) => set((state) => ({
     attendanceHistory: [record, ...state.attendanceHistory]
   })),
 
   setAttendanceHistory: (history) => set({ attendanceHistory: history }),
+  setAiInsights: (insights) => set({ aiInsights: insights }),
 
   addToOfflineQueue: (data) => set((state) => ({
     offlineQueue: [...state.offlineQueue, {
@@ -99,7 +109,7 @@ export const useStore = create<AppState>((set, get) => ({
 
     // Simulate API call delay
     await new Promise(r => setTimeout(r, 2000));
-    
+
     const newHistory = offlineQueue.map(item => ({
       id: item.id,
       studentId: item.data.studentId || 'unknown',
@@ -110,11 +120,11 @@ export const useStore = create<AppState>((set, get) => ({
       isSynced: true
     }));
 
-    set((state) => ({ 
+    set((state) => ({
       offlineQueue: [],
       attendanceHistory: [...newHistory, ...state.attendanceHistory]
     }));
-    
+
     alert(`Successfully synced ${offlineQueue.length} records to the cloud!`);
   }
 }));

@@ -46,3 +46,19 @@ export interface OfflineQueueItem {
   attempts: number;
   lastAttempt: number;
 }
+
+export interface ScheduleItem {
+  id: string;
+  courseName: string;
+  time: string;
+  professor: string;
+  room: string;
+  status: 'UPCOMING' | 'COMPLETED' | 'LIVE';
+}
+
+export interface AIAnalysisResult {
+  riskScore: number;
+  status: 'SAFE' | 'WARNING' | 'CRITICAL';
+  recommendation: string;
+  lastUpdated: number;
+}
